@@ -1,0 +1,32 @@
+{
+  "name": "@packaged-ui/ckeditor5-filer",
+  "version": "0.0.9",
+  "main": "index.js",
+  "repository": "git@github.com:packaged-ui/ckwidgets.git",
+  "author": "Tom Kay <oridan82@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@ckeditor/ckeditor5-core": "^12.1.0",
+    "@ckeditor/ckeditor5-ui": "^12.1.0",
+    "@ckeditor/ckeditor5-widget": "^11.0.1",
+    "@packaged-ui/filer": "^0.0.5"
+  },
+  "devDependencies": {
+    "@ckeditor/ckeditor5-editor-classic": "^12.1.0",
+    "@ckeditor/ckeditor5-essentials": "^11.0.1",
+    "@ckeditor/ckeditor5-basic-styles": "^11.1.0",
+    "@ckeditor/ckeditor5-paragraph": "^11.0.1",
+    "@ckeditor/ckeditor5-dev-utils": "^12.0.1",
+    "@ckeditor/ckeditor5-dev-webpack-plugin": "^8.0.1",
+    "@ckeditor/ckeditor5-theme-lark": "^13.0.1",
+    "postcss-loader": "^3.0.0",
+    "raw-loader": "^2.0.0",
+    "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^1.2.3",
+    "webpack": "^4",
+    "webpack-cli": "^3"
+  },
+  "scripts": {
+    "build": "webpack --mode development"
+  }
+}
