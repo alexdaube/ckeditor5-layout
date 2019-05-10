@@ -8,8 +8,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-core": "^12.1.0",
     "@ckeditor/ckeditor5-ui": "^12.1.0",
-    "@ckeditor/ckeditor5-widget": "^11.0.1",
-    "@packaged-ui/filer": "^0.0.5"
+    "@ckeditor/ckeditor5-widget": "^11.0.1"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-editor-classic": "^12.1.0",
