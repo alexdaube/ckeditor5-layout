@@ -39,7 +39,9 @@ export default class ColumnLayout extends BaseLayout
 
     // Handle tab key navigation.
     editor.keystrokes.set('tab', (...args) => this._tabHandler(...args), {priority: 'low'});
-    editor.keystrokes.set('backspace', (...args) => this._deleteHandler(...args), {priority: 'low'});
+    //editor.keystrokes.set('backspace', (...args) => this._deleteHandler(...args), {priority: 'low'});
+    // this is required instead of keystrokes to stop propagation of delete until https://github.com/ckeditor/ckeditor5/issues/1244 is resolved
+    editor.editing.view.document.on('delete', (...args) => this._deleteHandler(...args), {priority: 'low'});
 
     const cmd = new LayoutColumnCommand(editor);
     editor.commands.add(CMD_LAYOUT_COLUMN, cmd);
@@ -284,7 +286,7 @@ export default class ColumnLayout extends BaseLayout
     );
   }
 
-  _deleteHandler(domEventData, cancel)
+  _deleteHandler(evt, data)
   {
     const editor = this.editor;
     const selection = editor.model.document.selection;
@@ -332,7 +334,7 @@ export default class ColumnLayout extends BaseLayout
     }
 
     // stop other events
-    cancel();
+    evt.stop();
 
     editor.model.change(
       writer =>
@@ -341,6 +343,7 @@ export default class ColumnLayout extends BaseLayout
         writer.remove(editable);
       }
     );
+
     // check it was removed
     if(currentRowIndex - 1 === (layout.childCount - 1))
     {
