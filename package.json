@@ -1,6 +1,6 @@
 {
   "name": "@packaged-ui/ckeditor5-layout",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "index.js",
   "repository": "git@github.com:packaged-ui/ckeditor5-layout.git",
   "author": "Tom Kay <oridan82@gmail.com>",
