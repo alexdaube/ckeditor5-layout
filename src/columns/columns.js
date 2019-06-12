@@ -344,17 +344,18 @@ export default class ColumnLayout extends BaseLayout
       }
     );
 
-    // check it was removed
-    if(currentRowIndex - 1 === (layout.childCount - 1))
-    {
-      return;
-    }
-
-    // move to last column
     editor.model.change(
       writer =>
       {
-        writer.setSelection(writer.createRangeIn(layout.getChild(layout.childCount - 1)));
+        if(layout.childCount > 0) // move to last column
+        {
+          writer.setSelection(writer.createRangeIn(layout.getChild(layout.childCount - 1)));
+        }
+        else // move to the position before the layout and remove it
+        {
+          writer.setSelection(writer.createRange(writer.createPositionBefore(layout)));
+          writer.remove(layout);
+        }
       }
     );
   }
