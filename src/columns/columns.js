@@ -286,7 +286,6 @@ export default class ColumnLayout extends BaseLayout
 
   _deleteHandler(domEventData, cancel)
   {
-    console.log('delete handler');
     const editor = this.editor;
     const selection = editor.model.document.selection;
 
@@ -322,7 +321,6 @@ export default class ColumnLayout extends BaseLayout
 
     if(!isLastColumn)
     {
-      console.log('not last');
       return;
     }
 
@@ -330,7 +328,6 @@ export default class ColumnLayout extends BaseLayout
       || (editable.childCount === 1 && editable.getChild(0).isEmpty);
     if(!isEmpty)
     {
-      console.log('has children', editable.childCount);
       return;
     }
 
