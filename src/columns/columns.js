@@ -37,6 +37,10 @@ export default class ColumnLayout extends BaseLayout
     const editor = this.editor;
     const t = editor.t;
 
+    // Handle tab key navigation.
+    editor.keystrokes.set('tab', (...args) => this._tabHandler(...args), {priority: 'low'});
+    editor.keystrokes.set('backspace', (...args) => this._deleteHandler(...args), {priority: 'low'});
+
     const cmd = new LayoutColumnCommand(editor);
     editor.commands.add(CMD_LAYOUT_COLUMN, cmd);
 
@@ -213,6 +217,146 @@ export default class ColumnLayout extends BaseLayout
         }
       }
     }
+  }
+
+  _tabHandler(domEventData, cancel)
+  {
+    const editor = this.editor;
+    const selection = editor.model.document.selection;
+
+    // find current editable
+    const firstPosition = selection.getFirstPosition();
+    let editable = firstPosition.parent;
+
+    while(editable && editable.name !== 'layout-editable')
+    {
+      editable = editable.parent;
+    }
+
+    if(!editable)
+    {
+      return;
+    }
+
+    let layout = editable.parent;
+
+    while(layout && layout.name !== this._schemaName())
+    {
+      layout = layout.parent;
+    }
+
+    if(!layout)
+    {
+      return;
+    }
+
+    // is last column
+    const currentRowIndex = layout.getChildIndex(editable);
+    const isLastColumn = currentRowIndex === (layout.childCount - 1);
+
+    if(!isLastColumn)
+    {
+      return;
+    }
+
+    // stop other events
+    cancel();
+
+    editor.model.change(
+      writer =>
+      {
+        writer.setAttribute('columns', layout.getAttribute('columns') + 1, layout);
+        createLayoutEditable(writer, layout);
+      }
+    );
+    // check it was added
+    if(currentRowIndex === (layout.childCount - 1))
+    {
+      return;
+    }
+
+    // move to last column
+    editor.model.change(
+      writer =>
+      {
+        writer.setSelection(writer.createRangeIn(layout.getChild(layout.childCount - 1)));
+      }
+    );
+  }
+
+  _deleteHandler(domEventData, cancel)
+  {
+    console.log('delete handler');
+    const editor = this.editor;
+    const selection = editor.model.document.selection;
+
+    // find current editable
+    const firstPosition = selection.getFirstPosition();
+    let editable = firstPosition.parent;
+
+    while(editable && editable.name !== 'layout-editable')
+    {
+      editable = editable.parent;
+    }
+
+    if(!editable)
+    {
+      return;
+    }
+
+    let layout = editable.parent;
+
+    while(layout && layout.name !== this._schemaName())
+    {
+      layout = layout.parent;
+    }
+
+    if(!layout)
+    {
+      return;
+    }
+
+    // is last column
+    const currentRowIndex = layout.getChildIndex(editable);
+    const isLastColumn = currentRowIndex === (layout.childCount - 1);
+
+    if(!isLastColumn)
+    {
+      console.log('not last');
+      return;
+    }
+
+    const isEmpty = editable.isEmpty
+      || (editable.childCount === 1 && editable.getChild(0).isEmpty);
+    if(!isEmpty)
+    {
+      console.log('has children', editable.childCount);
+      return;
+    }
+
+    // stop other events
+    cancel();
+
+    editor.model.change(
+      writer =>
+      {
+        writer.setAttribute('columns', layout.getAttribute('columns') - 1, layout);
+        writer.remove(editable);
+      }
+    );
+    // check it was removed
+    if(currentRowIndex - 1 === (layout.childCount - 1))
+    {
+      return;
+    }
+
+    // move to last column
+    editor.model.change(
+      writer =>
+      {
+        writer.setSelection(writer.createRangeIn(layout.getChild(layout.childCount - 1)));
+      }
+    );
   }
 }
 
