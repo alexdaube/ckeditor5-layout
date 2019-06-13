@@ -10,12 +10,6 @@ import LayoutColumnCommand from "./layoutcolumncommand";
 
 import "./styles.css";
 
-const CMD_LAYOUT_COLUMN = 'layout-column';
-const LAYOUT_COLUMN_2 = 'layout-column-2';
-const LAYOUT_COLUMN_3 = 'layout-column-3';
-const LAYOUT_COLUMN_4 = 'layout-column-4';
-const LAYOUT_COLUMN_3_7 = 'layout-column-3/7';
-
 export default class ColumnLayout extends BaseLayout
 {
   _schemaName()
@@ -44,9 +38,11 @@ export default class ColumnLayout extends BaseLayout
     editor.editing.view.document.on('delete', (...args) => this._deleteHandler(...args), {priority: 'low'});
 
     const cmd = new LayoutColumnCommand(editor);
-    editor.commands.add(CMD_LAYOUT_COLUMN, cmd);
+    editor.plugins.get(Layout).registeredCommands.push(cmd);
+    editor.commands.add('layout-column', cmd);
 
     // column ui
+    const LAYOUT_COLUMN_2 = 'layout-column-2';
     editor.ui.componentFactory.add(
       LAYOUT_COLUMN_2, locale =>
       {
@@ -66,6 +62,11 @@ export default class ColumnLayout extends BaseLayout
         return btn;
       }
     );
+    editor.plugins.get(Layout).registeredLayouts.push(
+      editor.ui.componentFactory.create(LAYOUT_COLUMN_2)
+    );
+
+    const LAYOUT_COLUMN_3 = 'layout-column-3';
     editor.ui.componentFactory.add(
       LAYOUT_COLUMN_3, locale =>
       {
@@ -85,10 +86,7 @@ export default class ColumnLayout extends BaseLayout
         return btn;
       }
     );
-
-    editor.plugins.get(Layout).registeredCommands.push(cmd);
     editor.plugins.get(Layout).registeredLayouts.push(
-      editor.ui.componentFactory.create(LAYOUT_COLUMN_2),
       editor.ui.componentFactory.create(LAYOUT_COLUMN_3)
     );
 
