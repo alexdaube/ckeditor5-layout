@@ -265,7 +265,7 @@ export default class ColumnLayout extends BaseLayout
     editor.model.change(
       writer =>
       {
-        writer.setAttribute('columns', layout.getAttribute('columns') + 1, layout);
+        writer.setAttribute('columns', layout.getAttribute('columns') - (-1), layout);
         createLayoutEditable(writer, layout);
       }
     );
@@ -337,7 +337,7 @@ export default class ColumnLayout extends BaseLayout
     editor.model.change(
       writer =>
       {
-        writer.setAttribute('columns', layout.getAttribute('columns') - 1, layout);
+        writer.setAttribute('columns', layout.getAttribute('columns') - (1), layout);
         writer.remove(editable);
       }
     );
