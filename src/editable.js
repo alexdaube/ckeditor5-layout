@@ -39,9 +39,9 @@ export default class LayoutEditable extends Plugin
     conversion.for('dataDowncast').elementToElement(
       {
         model: LayoutEditable._schemaName,
-        view: (modelItem, viewWriter) =>
+        view: (modelItem, view) =>
         {
-          return viewWriter.createContainerElement('div', {class: 'ck-layout-editable'});
+          return view.writer.createContainerElement('div', {class: 'ck-layout-editable'});
         }
       }
     );
@@ -49,11 +49,11 @@ export default class LayoutEditable extends Plugin
     conversion.for('editingDowncast').elementToElement(
       {
         model: LayoutEditable._schemaName,
-        view: (modelItem, viewWriter) =>
+        view: (modelItem, view) =>
         {
-          const widgetElement = viewWriter.createEditableElement('div', {class: 'ck-layout-editable'});
+          const widgetElement = view.writer.createEditableElement('div', {class: 'ck-layout-editable'});
           // Enable widget handling on placeholder element inside editing view.
-          return toWidgetEditable(widgetElement, viewWriter);
+          return toWidgetEditable(widgetElement, view.writer);
         }
       }
     );

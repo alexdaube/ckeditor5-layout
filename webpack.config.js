@@ -1,64 +1,21 @@
-/**
- * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md.
- */
-
 'use strict';
 
-/* eslint-env node */
-
-const path = require('path');
-const webpack = require('webpack');
-const {bundler, styles} = require('@ckeditor/ckeditor5-dev-utils');
-const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
-const TerserWebpackPlugin = require('terser-webpack-plugin');
+const path = require( 'path' );
+const { styles } = require( '@ckeditor/ckeditor5-dev-utils' );
 
 module.exports = {
-  devtool: 'source-map',
-  performance: {hints: false},
-
-  entry: path.resolve(__dirname, 'example', 'example.js'),
+  entry: './example/example.js',
 
   output: {
-    // The name under which the editor will be exported.
-    path: path.resolve(__dirname, 'example', 'build'),
-    filename: 'ckeditor.min.js',
-    libraryTarget: 'umd',
-    /*libraryExport: 'default'*/
+    path: path.resolve( __dirname, 'dist' ),
+    filename: 'bundle.js'
   },
-
-  optimization: {
-    minimizer: [
-      new TerserWebpackPlugin(
-        {
-          sourceMap: true,
-        }
-      )
-    ]
-  },
-
-  plugins: [
-    new CKEditorWebpackPlugin(
-      {
-        // UI language. Language codes follow the https://en.wikipedia.org/wiki/ISO_639-1 format.
-        // When changing the built-in language, remember to also change it in the editor's configuration (src/ckeditor.js).
-        language: 'en',
-        additionalLanguages: 'all'
-      }
-    ),
-    new webpack.BannerPlugin(
-      {
-        banner: bundler.getLicenseBanner(),
-        raw: true
-      }
-    )
-  ],
 
   module: {
     rules: [
       {
         test: /\.svg$/,
-        use: ['raw-loader']
+        use: [ 'raw-loader' ]
       },
       {
         test: /\.css$/,
@@ -67,21 +24,28 @@ module.exports = {
             loader: 'style-loader',
             options: {
               injectType: 'singletonStyleTag',
+              attributes: {
+                'data-cke': true
+              }
             }
           },
           {
             loader: 'postcss-loader',
-            options: styles.getPostCssConfig(
-              {
-                themeImporter: {
-                  themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
-                },
-                minify: true
-              }
-            )
+            options: styles.getPostCssConfig( {
+              themeImporter: {
+                themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
+              },
+              minify: true
+            } )
           },
         ]
       }
     ]
-  }
+  },
+
+  // Useful for debugging.
+  devtool: 'source-map',
+
+  // By default webpack logs warnings if the bundle is bigger than 200kb.
+  performance: { hints: false }
 };

@@ -97,7 +97,7 @@ export default class ColumnLayout extends BaseLayout
     conversion.for('dataDowncast').elementToElement(
       {
         model: this._schemaName(),
-        view: (modelItem, viewWriter) => viewWriter.createContainerElement(
+        view: (modelItem, view) => view.writer.createContainerElement(
           'div', {
             class: 'ck-layout-columns',
             columns: modelItem.getAttribute('columns')
@@ -109,9 +109,9 @@ export default class ColumnLayout extends BaseLayout
     conversion.for('editingDowncast').elementToElement(
       {
         model: this._schemaName(),
-        view: (modelItem, viewWriter) =>
+        view: (modelItem, view) =>
         {
-          const widgetElement = viewWriter.createContainerElement(
+          const widgetElement = view.writer.createContainerElement(
             'div',
             {
               class: 'ck-layout-columns',
@@ -119,7 +119,7 @@ export default class ColumnLayout extends BaseLayout
             }
           );
           // Enable widget handling on placeholder element inside editing view.
-          return toWidget(widgetElement, viewWriter);
+          return toWidget(widgetElement, view.writer);
         }
       }
     );
