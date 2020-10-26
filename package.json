@@ -16,6 +16,7 @@
     "@ckeditor/ckeditor5-dev-webpack-plugin": "^23.6.0",
     "@ckeditor/ckeditor5-editor-classic": "^23.0.0",
     "@ckeditor/ckeditor5-essentials": "^23.0.0",
+    "@ckeditor/ckeditor5-inspector": "^2.2.0",
     "@ckeditor/ckeditor5-paragraph": "^23.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^23.0.0",
     "postcss-loader": "^3.0.0",

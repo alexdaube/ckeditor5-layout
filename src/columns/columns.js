@@ -97,10 +97,10 @@ export default class ColumnLayout extends BaseLayout
     conversion.for('dataDowncast').elementToElement(
       {
         model: this._schemaName(),
-        view: (modelItem, view) => view.writer.createContainerElement(
+        view: (modelElement, { writer: viewWriter } ) => viewWriter.createContainerElement(
           'div', {
             class: 'ck-layout-columns',
-            columns: modelItem.getAttribute('columns')
+            columns: modelElement.getAttribute('columns')
           }
         )
       }
@@ -109,17 +109,17 @@ export default class ColumnLayout extends BaseLayout
     conversion.for('editingDowncast').elementToElement(
       {
         model: this._schemaName(),
-        view: (modelItem, view) =>
+        view: (modelElement, { writer: viewWriter } ) =>
         {
-          const widgetElement = view.writer.createContainerElement(
+          const widgetElement = viewWriter.createContainerElement(
             'div',
             {
               class: 'ck-layout-columns',
-              columns: modelItem.getAttribute('columns')
+              columns: modelElement.getAttribute('columns')
             }
           );
           // Enable widget handling on placeholder element inside editing view.
-          return toWidget(widgetElement, view.writer);
+          return toWidget(widgetElement, viewWriter);
         }
       }
     );
@@ -168,7 +168,8 @@ export default class ColumnLayout extends BaseLayout
           viewEditable =>
           {
             conversionApi.consumable.consume(viewEditable, {name: true}); // IMPORTANT: CONSUME KILLS IT
-            if(viewEditable.is('div'))
+
+            if(viewEditable.name === 'div')
             {
               if(doneCols < colCount)
               {
